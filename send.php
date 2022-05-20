@@ -51,5 +51,5 @@ foreach ($rows as $row) {
     $execution = $twilio->studio->v2->flows($flow_id)
       ->executions
       ->create($phone_to, $phone_from, ['parameters' => $params]);
-    print($execution->sid);
+    print($execution->sid) . "\n";
 }
