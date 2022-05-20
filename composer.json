@@ -1,0 +1,17 @@
+{
+    "name": "weitzman/twilio-studio",
+    "require": {
+        "twilio/sdk": "^6.37"
+    },
+    "autoload": {
+        "psr-4": {
+            "Weitzman\\TwilioStudio\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Moshe Weitzman",
+            "email": "weitzman@tejasa.com"
+        }
+    ]
+}
