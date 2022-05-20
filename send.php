@@ -12,6 +12,12 @@ if (!$phone_to = $args[2]) {
 if (!$phone_from = $args[3]) {
   throw new InvalidArgumentException('From Phone is required');
 }
+if (!$params_str = $args[4]) {
+  throw new InvalidArgumentException('Params is required');
+}
+else {
+  parse_str($params_str, $params);
+}
 
 /**
  * See https://www.twilio.com/docs/studio/rest-api/v2/execution
@@ -29,6 +35,6 @@ $twilio = new Client($sid, $token);
 
 $execution = $twilio->studio->v2->flows($flow_id)
 ->executions
-->create($phone_to, $phone_from);
+->create($phone_to, $phone_from, ['parameters' => $params]);
 
 print($execution->sid);

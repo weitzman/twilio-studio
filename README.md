@@ -4,5 +4,6 @@ You must populate the following environment variables:
 - TWILIO_AUTH_TOKEN
 
 # Usage
-- `./send.php [FLOW_SID] [TO_PHONE_NUMBER] [FROM_PHONE_NUMBER]`
-- Example: `./send.php FW1386a5b79825cef92dee81010f4f1757 +16179708237 +1775522-8136`
+- `./send.php [FLOW_SID] [TO_PHONE_NUMBER] [FROM_PHONE_NUMBER] [PARAMS]`
+- Example: `./send.php FW3da95f1c6483017b5b23c536faada8f0 +16179708237 +17755228136 route=initial_schedule_path`
+- Params are name/value pairs formatted like a querystring.
