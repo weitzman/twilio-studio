@@ -4,20 +4,27 @@
 $args = $_SERVER['argv'];
 
 if (!$flow_id = $args[1]) {
-  throw new InvalidArgumentException('Flow ID is required');
+    throw new InvalidArgumentException('Flow ID is required');
 }
-if (!$phone_to = $args[2]) {
-  throw new InvalidArgumentException('To Phone is required');
+if (!$phone_from = $args[2]) {
+    throw new InvalidArgumentException('From Phone is required');
 }
-if (!$phone_from = $args[3]) {
-  throw new InvalidArgumentException('From Phone is required');
-}
-if (!$params_str = $args[4]) {
-  throw new InvalidArgumentException('Params is required');
+if (!$route = $args[3]) {
+    throw new InvalidArgumentException('Route is required');
 }
 else {
-  parse_str($params_str, $params);
+    $params['route'] = $route;
 }
+if (!$path = $args[4]) {
+  throw new InvalidArgumentException('Path is required');
+}
+else {
+    $fh = fopen($path, 'r');
+    $data = fgetcsv($fh);
+}
+
+// For mail merge later.
+// parse_str($params_str, $params);
 
 /**
  * See https://www.twilio.com/docs/studio/rest-api/v2/execution
@@ -33,8 +40,9 @@ $sid = getenv("TWILIO_ACCOUNT_SID");
 $token = getenv("TWILIO_AUTH_TOKEN");
 $twilio = new Client($sid, $token);
 
-$execution = $twilio->studio->v2->flows($flow_id)
-->executions
-->create($phone_to, $phone_from, ['parameters' => $params]);
-
-print($execution->sid);
+foreach ($data as $phone_to) {
+    $execution = $twilio->studio->v2->flows($flow_id)
+      ->executions
+      ->create($phone_to, $phone_from, ['parameters' => $params]);
+    print($execution->sid);
+}
