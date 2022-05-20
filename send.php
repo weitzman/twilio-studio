@@ -1,6 +1,18 @@
 #!/usr/bin/env php
 <?php
 
+$args = $_SERVER['argv'];
+
+if (!$flow_id = $args[1]) {
+  throw new InvalidArgumentException('Flow ID is required');
+}
+if (!$phone_to = $args[2]) {
+  throw new InvalidArgumentException('To Phone is required');
+}
+if (!$phone_from = $args[3]) {
+  throw new InvalidArgumentException('From Phone is required');
+}
+
 /**
  * See https://www.twilio.com/docs/studio/rest-api/v2/execution
  */
@@ -15,8 +27,8 @@ $sid = getenv("TWILIO_ACCOUNT_SID");
 $token = getenv("TWILIO_AUTH_TOKEN");
 $twilio = new Client($sid, $token);
 
-$execution = $twilio->studio->v2->flows("FW1386a5b79825cef92dee81010f4f1757")
+$execution = $twilio->studio->v2->flows($flow_id)
 ->executions
-->create("+16179708237", "+1775522-8136");
+->create($phone_to, $phone_from);
 
 print($execution->sid);
