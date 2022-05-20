@@ -19,8 +19,12 @@ if (!$path = $args[4]) {
   throw new InvalidArgumentException('Path is required');
 }
 else {
-    $fh = fopen($path, 'r');
-    $data = fgetcsv($fh);
+  if (($handle = fopen($path, "r")) !== FALSE) {
+    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+      $rows[] = $data;
+    }
+    fclose($handle);
+  }
 }
 
 // For mail merge later.
@@ -40,7 +44,10 @@ $sid = getenv("TWILIO_ACCOUNT_SID");
 $token = getenv("TWILIO_AUTH_TOKEN");
 $twilio = new Client($sid, $token);
 
-foreach ($data as $phone_to) {
+foreach ($rows as $row) {
+    $phone_to = $row[0];
+    unset($row[0]);
+    array_merge($params, $row);
     $execution = $twilio->studio->v2->flows($flow_id)
       ->executions
       ->create($phone_to, $phone_from, ['parameters' => $params]);
